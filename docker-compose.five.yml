@@ -1,0 +1,80 @@
+# 五节点集群。投票成员一开始就是这五台，法定人数为 3。
+name: keelstone
+
+services:
+  n1:
+    build: .
+    container_name: keelstone-n1
+    networks: [keelstone]
+    command:
+      - --id=n1
+      - --listen=:43121
+      - --advertise=http://n1:43121
+      - --data=/data
+      - --peers=n1=http://n1:43121,n2=http://n2:43121,n3=http://n3:43121,n4=http://n4:43121,n5=http://n5:43121
+    ports: ["23121:43121"]
+    volumes: [n1:/data]
+  n2:
+    build: .
+    container_name: keelstone-n2
+    networks: [keelstone]
+    command:
+      - --id=n2
+      - --listen=:43121
+      - --advertise=http://n2:43121
+      - --data=/data
+      - --peers=n1=http://n1:43121,n2=http://n2:43121,n3=http://n3:43121,n4=http://n4:43121,n5=http://n5:43121
+    ports: ["23122:43121"]
+    volumes: [n2:/data]
+  n3:
+    build: .
+    container_name: keelstone-n3
+    networks: [keelstone]
+    command:
+      - --id=n3
+      - --listen=:43121
+      - --advertise=http://n3:43121
+      - --data=/data
+      - --peers=n1=http://n1:43121,n2=http://n2:43121,n3=http://n3:43121,n4=http://n4:43121,n5=http://n5:43121
+    ports: ["23123:43121"]
+    volumes: [n3:/data]
+  n4:
+    build: .
+    container_name: keelstone-n4
+    networks: [keelstone]
+    command:
+      - --id=n4
+      - --listen=:43121
+      - --advertise=http://n4:43121
+      - --data=/data
+      - --peers=n1=http://n1:43121,n2=http://n2:43121,n3=http://n3:43121,n4=http://n4:43121,n5=http://n5:43121
+    ports: ["23124:43121"]
+    volumes: [n4:/data]
+  n5:
+    build: .
+    container_name: keelstone-n5
+    networks: [keelstone]
+    command:
+      - --id=n5
+      - --listen=:43121
+      - --advertise=http://n5:43121
+      - --data=/data
+      - --peers=n1=http://n1:43121,n2=http://n2:43121,n3=http://n3:43121,n4=http://n4:43121,n5=http://n5:43121
+    ports: ["23125:43121"]
+    volumes: [n5:/data]
+
+networks:
+  keelstone:
+    name: keelstone
+
+volumes:
+  n1:
+    name: keelstone-n1
+  n2:
+    name: keelstone-n2
+  n3:
+    name: keelstone-n3
+  n4:
+    name: keelstone-n4
+  n5:
+    name: keelstone-n5

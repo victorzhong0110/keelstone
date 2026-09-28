@@ -1,0 +1,18 @@
+bin/
+data/
+*.out
+coverage.out
+bench-data/
+uploads/
+
+# 节点 WAL、快照和压测原始输出
+hardstate
+wal
+wal.tmp
+snapshot
+*.snap
+results.jsonl
+raw-*.json
+l2delay.log
+host.txt
+netem-*.txt

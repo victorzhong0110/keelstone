@@ -1,0 +1,74 @@
+# 三节点集群。五节点见 docker-compose.five.yml。
+# 端口避开 3000/8080，方便和本机其他服务同时跑。
+name: keelstone
+
+services:
+  n1:
+    build: .
+    container_name: keelstone-n1
+    command:
+      - --id=n1
+      - --listen=:43121
+      - --advertise=http://n1:43121
+      - --data=/data
+      - --peers=n1=http://n1:43121,n2=http://n2:43121,n3=http://n3:43121
+    ports:
+      - "23121:43121"
+    volumes:
+      - n1:/data
+    networks: [keelstone]
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://127.0.0.1:43121/healthz"]
+      interval: 2s
+      timeout: 1s
+      retries: 20
+  n2:
+    build: .
+    container_name: keelstone-n2
+    command:
+      - --id=n2
+      - --listen=:43121
+      - --advertise=http://n2:43121
+      - --data=/data
+      - --peers=n1=http://n1:43121,n2=http://n2:43121,n3=http://n3:43121
+    ports:
+      - "23122:43121"
+    volumes:
+      - n2:/data
+    networks: [keelstone]
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://127.0.0.1:43121/healthz"]
+      interval: 2s
+      timeout: 1s
+      retries: 20
+  n3:
+    build: .
+    container_name: keelstone-n3
+    command:
+      - --id=n3
+      - --listen=:43121
+      - --advertise=http://n3:43121
+      - --data=/data
+      - --peers=n1=http://n1:43121,n2=http://n2:43121,n3=http://n3:43121
+    ports:
+      - "23123:43121"
+    volumes:
+      - n3:/data
+    networks: [keelstone]
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://127.0.0.1:43121/healthz"]
+      interval: 2s
+      timeout: 1s
+      retries: 20
+
+networks:
+  keelstone:
+    name: keelstone
+
+volumes:
+  n1:
+    name: keelstone-n1
+  n2:
+    name: keelstone-n2
+  n3:
+    name: keelstone-n3
